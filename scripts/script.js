@@ -80,7 +80,7 @@ function calculateCgpa() {
 
   let cgpa = totalGradePoints / totalUnits;
   document.querySelector('.js-result-display').innerHTML = `
-    GPA: ${cgpa.toFixed(2)}<br>
+    CGPA: ${cgpa.toFixed(2)}<br>
     Carry Overs: ${carryOvers}
   `;
 
