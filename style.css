@@ -34,7 +34,7 @@ body.modal-open .add-button {
 
 .modal {
   background-color: rgb(15, 125, 250);
-  width: 400px;
+  width: 90%;
   padding: 3rem 2rem;
   text-align: center;
   border-radius: 4px;
