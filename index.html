@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Input your courses, units, and grades to get your GPA.">
+  <title>Calculate gpa</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="modal-container" class="modal-container">
+    <div class="modal">
+      <p>
+        Please fill out all fields correctly
+      </p>
+      <button id="close" class="close-button">
+        Close
+      </button>
+    </div>
+  </div>
+
+  <h1 class="header">GPA Calculator</h1>
+  <main class="container">
+    <form class="course-input-form">
+      <input class="js-course-code-input course-code" type="text" placeholder="Course Code">
+      <input class="js-unit-input unit" type="number" placeholder="Unit">
+      <select class="js-grade-input grade-input">
+        <option value="" disabled selected>Select Grade</option>
+        <option value="A">A</option>
+        <option value="B">B</option>
+        <option value="C">C</option>
+        <option value="D">D</option>
+        <option value="E">E</option>
+        <option value="F">F<F/option>
+      </select>
+      <button type="button" class="js-add-button add-button">Add Course</button>
+    </form>
+
+    <div class="course-list-grid-header">
+      <div>Course Code</div>
+      <div class="course-list-unit">Unit</div>
+      <div>Grade</div>
+      <!-- <div>Action</div> -->
+    </div>
+
+    <div class="js-course-list-grid course-list-grid"></div>
+
+    <button class="js-calculate-button calculate-button">
+      Calculate GPA
+    </button>
+
+    <div class="js-result-display result-display">
+      
+    </div>
+
+  </main>
+  
+  <script src="scripts/script.js"></script>
+</body>
+</html>
