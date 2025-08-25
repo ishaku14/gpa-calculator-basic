@@ -49,7 +49,7 @@ document.querySelector('.js-add-button')
 //Maps grades to respective points, gets grade points and calculates cgpa
 function calculateCgpa() {
   let totalGradePoints = 0;
-  const totalUnits = getTotalUnits();
+  let totalUnits = 0;
   let carryOvers = 0;
 
   const gradeScale = {
@@ -63,26 +63,29 @@ function calculateCgpa() {
 
   const gradePoints = courses.map(course => gradeScale[course.grade]);
 
-  courses.forEach((value, index) => {
-    if (gradePoints[index] === 0) {
-      carryOvers ++;
+  courses.forEach((course, index) => {
+    totalGradePoints += gradePoints[index] * course.unit;
+    totalUnits += course.unit;
+
+    if(gradePoints[index] === 0) {
+      carryOvers++;
       return;
     }
-    totalGradePoints += gradePoints[index] * courses[index].unit;
+
   });
 
-  if (totalUnits === 0) {
+  let cgpa = totalGradePoints / totalUnits;
+
+  if(totalUnits === 0) {
     document.querySelector('.js-result-display').innerHTML = `
       No courses to calculate.
     `;
-    return;
-  }
-
-  let cgpa = totalGradePoints / totalUnits;
-  document.querySelector('.js-result-display').innerHTML = `
+  } else {
+    document.querySelector('.js-result-display').innerHTML = `
     CGPA: ${cgpa.toFixed(2)}<br>
     Carry Overs: ${carryOvers}
   `;
+  }
 
 }
 
@@ -115,19 +118,8 @@ function renderCoursesHtml() {
     });
 }
 
-
 //Calculates the CGPA when the calculate cgpa button is clicked.
 document.querySelector('.js-calculate-button')
   .addEventListener('click', () => {
     calculateCgpa();
 });
-
-//To get the total units of all the courses.
-function getTotalUnits() {
-  let totalUnits = 0;
-  for (let i = 0; i < courses.length; i++) {
-    // const total = courses[i].unit;
-    totalUnits += courses[i].unit;
-  }
-  return totalUnits;
-}
