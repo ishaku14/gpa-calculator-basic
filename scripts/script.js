@@ -7,35 +7,23 @@ document.querySelector('.js-add-button')
   .addEventListener('click', () => {
     const courseCodeInputElement = document.querySelector('.js-course-code-input');
     const courseCode = courseCodeInputElement.value;
-
+    
     const unitInputElement = document.querySelector('.js-unit-input');
     const unit = Number(unitInputElement.value);
-
+    
     const gradeInputElement = document.querySelector('.js-grade-input');
     const grade = gradeInputElement.value;
-
-    const modalContainer = document.getElementById('modal-container');
-
-    const closeModal = document.getElementById('close');
-
-    closeModal.addEventListener('click', () => {
-      modalContainer.classList.remove('show');
-      document.body.classList.remove('modal-open');
-    })
-
+    
     //Handles invalid or null inputs
     if (!courseCode || isNaN(unit) || !grade) {
-      // alert('Please fill out all fields correctly.');
-      modalContainer.classList.add('show');
-      document.body.classList.add('modal-open');
+      statusMessage('Please fill out all the fields!', 'error');
       return;
+    } else {
+      statusMessage('Course Added successfully!', 'success');
+      courses.push({
+        courseCode,unit,grade
+      });
     }
-
-    courses.push({
-      courseCode,
-      unit,
-      grade
-    });
 
     //Saves the course in local storage
     localStorage.setItem('course', JSON.stringify(courses));
@@ -47,7 +35,8 @@ document.querySelector('.js-add-button')
 });
 
 //Maps grades to respective points, gets grade points and calculates cgpa
-function calculateCgpa() {
+function calculateGpa() {
+  const resultElement = document.querySelector('.js-result-display');
   let totalGradePoints = 0;
   let totalUnits = 0;
   let carryOvers = 0;
@@ -74,19 +63,23 @@ function calculateCgpa() {
 
   });
 
-  let cgpa = totalGradePoints / totalUnits;
+  let gpa = totalGradePoints / totalUnits;
 
   if(totalUnits === 0) {
-    document.querySelector('.js-result-display').innerHTML = `
-      No courses to calculate.
+    resultElement.innerHTML = `
+    <strong>No course added yet.</strong>
+    <p class="italic-text">Add at least one course to calculate your GPA.</p>
     `;
+    
+    setTimeout(() => {
+      resultElement.textContent = '';
+    }, 2000);
   } else {
-    document.querySelector('.js-result-display').innerHTML = `
-    CGPA: ${cgpa.toFixed(2)}<br>
-    Carry Overs: ${carryOvers}
+    resultElement.innerHTML = `
+    <strong>GPA: ${gpa.toFixed(2)}</strong>
+    <p>Carry Overs: ${carryOvers}</p>
   `;
   }
-
 }
 
 //This displays the courses entered on the webpage
@@ -95,11 +88,17 @@ function renderCoursesHtml() {
   courses.forEach((coursesObject, index) => {
     const {courseCode, unit, grade} = coursesObject;
     const html = `
-      <div class="course-row">
-        <div class="course-code">${courseCode}</div>
-        <div class="course-unit">${unit}</div>
-        <div class="grade">${grade}</div>
-        <button class="delete-button js-delete-button">Delete</button>
+      <div class="course">
+        <div class="index">
+          ${index + 1}.
+        </div>
+        
+        <div class="course-row">
+          <div class="course-code">${courseCode}</div>
+          <div class="course-unit">${unit}</div>
+          <div class="grade">${grade}</div>
+          <img src="icons/delete-icon.svg" class="delete-button js-delete-button">
+        </div>
       </div>
     `;
     coursesHtml += html;
@@ -118,8 +117,19 @@ function renderCoursesHtml() {
     });
 }
 
+const statusMessage = (text, type) => {
+  const messageElement = document.querySelector('.js-message');
+  
+  messageElement.textContent = text;
+  messageElement.className = `status-message js-message ${type}`;
+  
+  setTimeout(() => {
+    messageElement.textContent = '';
+  }, 2000);
+};
+
 //Calculates the CGPA when the calculate cgpa button is clicked.
 document.querySelector('.js-calculate-button')
   .addEventListener('click', () => {
-    calculateCgpa();
+    calculateGpa();
 });
